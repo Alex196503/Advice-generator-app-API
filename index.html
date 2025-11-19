@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Manrope">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            min-height: 100vh;
+            font-size:28px;
+            background-color: hsl(218, 23%, 16%);
+            color:white;
+            line-height: 1.4;
+            font-family: 'Manrope', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap:15px;
+        }
+        .main{
+            background-color: hsl(217, 19%, 24%);
+            min-height: 300px;
+            height: auto;
+            width: 100%;
+            position: relative;
+            max-width: 460px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: flex-start;
+            z-index:1;
+            align-items: center;
+            flex-direction: column;
+            gap:8px;
+            box-shadow: 3px 20px 16px hsl(220, 29%, 10%);
+        }
+        .main p{
+            color:hsl(150, 100%, 66%);
+            padding:20px;
+            font-weight: bold;
+            margin-top:15px;
+            text-transform: uppercase;
+            font-size:0.35em;
+            letter-spacing: 3px;
+        }
+        .main h3{
+            color:hsl(193, 38%, 86%);
+            font-size:0.9em;
+            font-weight: 800;
+            padding:5px;
+            text-align: center;
+            text-wrap: pretty;
+        }
+        .advice{
+            width:84%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .first-image{
+            padding:5px;
+            object-fit: contain;
+            width:84%;
+            object-position: center;
+            margin-bottom: 20px;
+        }
+        .dice{
+            position: absolute;
+            top:91%;
+            padding:15px;
+            z-index:2;
+            margin-top: 5px;
+            border-radius: 50%;
+            background-color: hsl(150, 100%, 66%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .dice:hover::after{
+            content:'';
+            position: absolute;
+            z-index:-1;
+            width:115%;
+            height:115%;
+            border-radius: 50%;
+            background: hsl(150, 100%, 66%);
+            opacity:0.8;
+            filter: blur(20px);
+        }
+        .dice>img{
+            width:100%;
+            display: inline-block;
+            object-fit: contain;
+            object-position: center;
+        }
+        @media(max-width:750px)
+        {
+            body{
+                min-height: 100vh;
+            }
+            .main{
+                width:80%;
+                min-height: 320px;
+            }
+           
+            .main h3{
+                margin-left:20px;
+            }
+            .advice{
+                margin-bottom: 10px;
+            }
+            .first-image{
+                margin-top:10px;
+                padding:10px;
+            }
+            .dice{
+                margin-top:8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="main">
+        <p>ADVICE </p>
+        <section class="advice">
+        <h3></h3>
+        </section>
+        <img class="first-image" src="pattern-divider-desktop.svg" alt="Image with some random divider">
+        <section class="dice">
+        <img src="icon-dice.svg" alt="Image with a dice">
+        </section>
+    </main>
+</body>
+<script>
+document.addEventListener(('DOMContentLoaded'),()=>{
+    let btn=document.querySelector('.dice');
+    let paragraf=document.querySelector('.main h3');
+    let adviceId=document.querySelector('.main p');
+    paragraf.innerHTML='';
+    let fetchAnswer = async ( )=>{
+        try{
+        let req = await fetch('https://api.adviceslip.com/advice', {cache:'no-cache'});
+        let data = await req.json();
+        let IdAnswer = data.slip.id;
+        let answer = data.slip.advice;
+        paragraf.innerHTML = answer;
+        adviceId.innerHTML = `ADVICE ${IdAnswer}`;
+        }catch(error)
+        {
+            paragraf.innerHTML=`${error}. Check the console`;
+            console.log(error);
+            
+        }
+    }
+    fetchAnswer();
+    btn.addEventListener('click', fetchAnswer);
+})
+</script>
+</html>
